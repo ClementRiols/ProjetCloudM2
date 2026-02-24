@@ -5,16 +5,17 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-  "dev": "nodemon src/index.js",
-  "start": "node src/index.js"
-},
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.990.0",
+    "@aws-sdk/client-dynamodb": "^3.995.0",
+    "@aws-sdk/client-lambda": "^3.995.0",
     "@aws-sdk/client-s3": "^3.990.0",
-    "@aws-sdk/client-sqs": "^3.990.0",
+    "@aws-sdk/client-sqs": "^3.995.0",
     "@aws-sdk/lib-dynamodb": "^3.990.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
