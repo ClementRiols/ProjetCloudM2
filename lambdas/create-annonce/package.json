@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "install:prod": "npm ci --omit=dev",
+  "build:zip": "node build-zip.mjs"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

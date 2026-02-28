@@ -9,8 +9,7 @@ function CreatePage() {
   };
 
   return (
-    <div className="page-container">
-      <h2>Créer une annonce</h2>
+    <div className="page-container"> 
       <CreateAnnonce onCreated={handleCreated} />
     </div>
   );

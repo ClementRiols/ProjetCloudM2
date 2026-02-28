@@ -17,11 +17,12 @@ provider "aws" {
   skip_requesting_account_id  = true
 
   endpoints {
-    s3       = "http://localhost:4566"
-    dynamodb = "http://localhost:4566"
-    sqs      = "http://localhost:4566"
-    lambda   = "http://localhost:4566"
-  }
+  s3         = "http://host.docker.internal:4566"
+  dynamodb   = "http://host.docker.internal:4566"
+  sqs        = "http://host.docker.internal:4566"
+  lambda     = "http://host.docker.internal:4566"
+  apigateway = "http://host.docker.internal:4566"
+}
 
   s3_use_path_style = true
 }
@@ -53,10 +54,9 @@ resource "aws_sqs_queue" "annonce_events" {
 
 resource "aws_lambda_function" "create_annonce" {
   function_name = "create-annonce"
-  role          = "arn:aws:iam::000000000000:role/lambda-role" # juste un ARN bidon
+  role          = "arn:aws:iam::000000000000:role/lambda-role"
   handler       = "index.handler"
   runtime       = "nodejs18.x"
 
-  filename         = "../../lambdas/create-annonce.zip"
-  source_code_hash = filebase64sha256("../../lambdas/create-annonce.zip")
+  filename = "/workspace/lambdas/create-annonce/create-annonce.zip"
 }
