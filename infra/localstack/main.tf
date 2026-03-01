@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region     = "us-east-1"
+  region     = var.region
   access_key = "test"
   secret_key = "test"
 
@@ -20,24 +20,24 @@ provider "aws" {
   skip_region_validation      = true
 
   endpoints {
-  s3       = "http://localhost:4566"
-  dynamodb = "http://localhost:4566"
-  sqs      = "http://localhost:4566"
-  lambda   = "http://localhost:4566"
-  iam      = "http://localhost:4566"
-  sts      = "http://localhost:4566"
-  } 
+    s3       = var.localstack_endpoint
+    dynamodb = var.localstack_endpoint
+    sqs      = var.localstack_endpoint
+    lambda   = var.localstack_endpoint
+    iam      = var.localstack_endpoint
+    sts      = var.localstack_endpoint
+  }
 }
 
 resource "aws_s3_bucket" "lostfound_images" {
-  bucket = "lostfound-images"
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_cors_configuration" "lostfound_images_cors" {
   bucket = aws_s3_bucket.lostfound_images.id
 
   cors_rule {
-    allowed_origins = ["http://localhost:3000", "http://localhost:3001"]
+    allowed_origins = var.cors_allowed_origins
     allowed_methods = ["GET", "PUT", "POST", "HEAD"]
     allowed_headers = ["*"]
     expose_headers  = ["ETag"]
@@ -46,7 +46,7 @@ resource "aws_s3_bucket_cors_configuration" "lostfound_images_cors" {
 }
 
 resource "aws_dynamodb_table" "annonces" {
-  name         = "Annonces"
+  name         = var.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "pk"
@@ -64,5 +64,5 @@ resource "aws_dynamodb_table" "annonces" {
 }
 
 resource "aws_sqs_queue" "annonce_events" {
-  name = "annonce-events"
+  name = var.sqs_queue_name
 }

@@ -10,6 +10,8 @@ function CreateAnnonce({ onCreated }) {
   const [eventDate, setEventDate] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mail, setMail] = useState("");
+  const [tel, setTel] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,7 +47,7 @@ function CreateAnnonce({ onCreated }) {
       const res = await fetch(`${API_BASE}/annonces`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ annonceId, title, description, location, type, eventDate, imageKey }),
+        body: JSON.stringify({ annonceId, title, description, location, type, eventDate, imageKey, mail, tel }),
       });
 
       const data = await res.json();
@@ -60,6 +62,8 @@ function CreateAnnonce({ onCreated }) {
       setTitle("");
       setDescription("");
       setLocation("");
+      setMail("");
+      setTel("");
       setType("PERDU");
       setEventDate("");
       setImage(null);
@@ -96,6 +100,21 @@ function CreateAnnonce({ onCreated }) {
         placeholder="Lieu"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
+      />
+
+      <input
+        type="email"
+        placeholder="Email"
+        value={mail}
+        onChange={(e) => setMail(e.target.value)}
+        required
+      />
+
+      <input
+        type="tel"
+        placeholder="Téléphone"
+        value={tel}
+        onChange={(e) => setTel(e.target.value)}
       />
 
       <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />

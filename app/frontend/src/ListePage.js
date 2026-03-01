@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const API_BASE = "http://localhost:3000";
 const LOCALSTACK_BASE = "http://localhost:4566";
 const S3_BUCKET = "lostfound-images";
-const FALLBACK_IMG = "/default-cover.jpg"; 
+const FALLBACK_IMG = "/default-cover.jpg";
 
 function ListePage() {
   const [annonces, setAnnonces] = useState([]);
@@ -155,7 +155,21 @@ function ListePage() {
                           : "-"}
                       </span>
                     </div>
+                    {(a.mail || a.tel) && (
+                      <div className="info-contact">
+                        <span className="info-label">Contact :</span>
 
+                        <div className="info-row">
+                          <span>Email</span>
+                          <span className="info-value align-right">{a.mail || "-"}</span>
+                        </div>
+
+                        <div className="info-row">
+                          <span>Téléphone</span>
+                          <span className="info-value align-right">{a.tel || "-"}</span>
+                        </div>
+                      </div>
+                    )}
                     <div className="info-description">
                       <span className="info-label">Description</span>
                       <p>{a.description || "-"}</p>
@@ -168,10 +182,6 @@ function ListePage() {
                           onClick={() => resolveAnnonce(a.pk)}
                         >
                           Clôturer
-                        </button>
-
-                        <button className="btn btn-ghost small compact">
-                          Contacter
                         </button>
                       </div>
                     )}

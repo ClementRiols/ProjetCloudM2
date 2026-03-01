@@ -2,7 +2,7 @@
 
 ## 1) Architecture & rôles des composants
 
-### Structure du projet (vue simplifiée)
+### Structure simplifiée du projet 
 - `infra/`
   - `docker-compose.yml` : démarre **LocalStack** (AWS local) sur le port `4566`
   - `localstack/`
@@ -96,7 +96,7 @@ Objectif : déployer la fonction create-annonce pour activer l’interface de cr
 
 #### 1.Vérifier que le zip est bien présent en local (Windows / PowerShell):
 
-cd C:\Users\yajin\Downloads\ProjetCloudM2
+cd ProjetCloudM2
 dir .\lambdas\create-annonce\create-annonce.zip
 
 #### 2.Créer le rôle IAM lambda-role (si nécessaire):

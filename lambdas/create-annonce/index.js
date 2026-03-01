@@ -49,6 +49,13 @@ export const handler = async (event) => {
       body: JSON.stringify({ error: "Le titre est requis." }),
     };
   }
+  // Optionnel : validations simples
+  if (body.mail && !/^\S+@\S+\.\S+$/.test(body.mail)) {
+    return { statusCode: 400, body: JSON.stringify({ error: "Email invalide." }) };
+  }
+  if (body.tel && !/^[0-9+()\s.-]{6,20}$/.test(body.tel)) {
+    return { statusCode: 400, body: JSON.stringify({ error: "Téléphone invalide." }) };
+  }
 
   const createdAt = new Date().toISOString();
 
@@ -67,6 +74,8 @@ export const handler = async (event) => {
           imageKey: { S: body.imageKey || "" },
           status: { S: "OPEN" },
           createdAt: { S: createdAt },
+          mail: { S: body.mail || "" },
+          tel: { S: body.tel || "" },
         },
       })
     );
