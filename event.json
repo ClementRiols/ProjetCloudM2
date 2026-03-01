@@ -1,0 +1,7 @@
+{
+  "body": "{\"annonceId\":\"test-001\"}",
+  "headers": { "content-type": "application/json" },
+  "httpMethod": "POST",
+  "path": "/annonces",
+  "isBase64Encoded": false
+}
