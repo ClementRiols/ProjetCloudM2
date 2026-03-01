@@ -8,32 +8,29 @@ import MesAnnoncesPage from "./MesAnnoncesPage";
 function App() {
   return (
     <Router>
-      <div className="header">
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="36"
-            height="36"
-            fill="white"
-            viewBox="0 0 24 24"
-          >
-            <path d="M21.71 20.29l-3.388-3.388A8.938 8.938 0 0 0 18 10a9 9 0 1 0-9 9 8.938 8.938 0 0 0 6.902-3.678l3.388 3.388a1 1 0 0 0 1.414-1.414zM4 10a6 6 0 1 1 6 6 6.007 6.007 0 0 1-6-6z"/>
-          </svg>
-          <div>
-            <h1 style={{ margin: 0 }}>Trob'Objècte</h1>
-            <p style={{ margin: 0, fontSize: "14px" }}>Objet perdu / trouvé</p>
+      <header className="header">
+        <div className="header-left">
+          <div className="brand-mark" aria-hidden="true">
+            <img src="/logo.svg" alt="" />
+          </div>
+
+          <div className="header-text">
+            <h1>Retrouvéo</h1>
+            <p>Objets perdus &amp; trouvés</p>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="main">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/annonces" element={<ListePage />} />
-          <Route path="/mes-annonces" element={<MesAnnoncesPage />} />
-        </Routes>
-      </div>
+      <main className="main">
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/create" element={<CreatePage />} />
+            <Route path="/annonces" element={<ListePage />} />
+            <Route path="/mes-annonces" element={<MesAnnoncesPage />} />
+          </Routes>
+        </div>
+      </main>
     </Router>
   );
 }
