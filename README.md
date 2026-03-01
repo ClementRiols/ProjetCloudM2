@@ -10,7 +10,7 @@
     - `output.tf` : sorties utiles (ex. URL de la file SQS)
 - `lambdas/`
   - `create-annonce/`
-    - `create-annonce.zip` : **package Lambda** déjà prêt à déployer
+    - `create-annonce.zip` : **package Lambda** 
 - `app/` (front/back de l’application)
   - l’API de l’application appelle les services AWS locaux (ou la Lambda) via LocalStack
 
@@ -45,13 +45,11 @@ Dans `main.tf`, on crée précisément :
 **3) SQS**
 - File : `annonce-events`
 
-### Lambda (déploiement manuel)
+**4) Lambda**
 Une fois les ressources créées :
-- on **déploie manuellement** la Lambda depuis le zip existant :
-  - `lambdas/create-annonce/create-annonce.zip`
 - la fonction Lambda s’appelle :
   - `create-annonce`
-- elle sert à **implémenter l’interface (endpoint côté logique)** pour créer une annonce (validation + écriture dans les ressources).
+- elle sert à **implémenter l’interface.**
 
 ---
 
@@ -70,7 +68,7 @@ docker compose ps
 cd localstack
 tofu init
 tofu apply -auto-approve
-tofu output -json > output.json                   
+tofu output -json > output.json (optionel)              
 
 ### Étape D — Vérifier que les 3 ressources existent
 Exécuter les commandes suivantes:
@@ -89,90 +87,7 @@ DynamoDB : table Annonces
 
 SQS : file annonce-events
 
-### Étape E — Déployer la Lambda (à partir du zip existant)
-On utilise le zip déjà présent : lambdas/create-annonce/create-annonce.zip
-
-Objectif : déployer la fonction create-annonce pour activer l’interface de création d’annonce.
-
-#### 1.Vérifier que le zip est bien présent en local (Windows / PowerShell):
-
-cd ProjetCloudM2
-dir .\lambdas\create-annonce\create-annonce.zip
-
-#### 2.Créer le rôle IAM lambda-role (si nécessaire):
-
-LocalStack a besoin d’un rôle IAM pour créer la Lambda.
-Si le rôle existe déjà, la création renverra une erreur (ce n’est pas bloquant), sinon il sera créé.
-
--Générer le fichier de trust policy :
-
-cd ProjetCloudM2
-
-@'
-{
-  "Version": "2012-10-17",
-  "Statement": [{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}]
-}
-'@ | Out-File -Encoding ascii .\trust.json
-
--Créer le rôle dans LocalStack :
-
-docker run --rm --network infra_default `
-  -v "${PWD}:/workspace" `
-  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
-  amazon/aws-cli:2.15.40 iam create-role `
-  --role-name lambda-role `
-  --assume-role-policy-document file:///workspace/trust.json `
-  --endpoint-url http://localstack:4566
-
-#### 3.Vérifier si la Lambda existe déjà
-
-docker run --rm --network infra_default `
-  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
-  amazon/aws-cli:2.15.40 lambda get-function `
-  --function-name create-annonce `
-  --endpoint-url http://localstack:4566
-
-#### 4A.Si vous obtenez ResourceNotFoundException → la fonction n’existe pas : créez-la
-
-cd ProjetCloudM2
-
-docker run --rm --network infra_default `
-  -v "${PWD}:/workspace" `
-  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
-  amazon/aws-cli:2.15.40 lambda create-function `
-  --function-name create-annonce `
-  --runtime nodejs18.x `
-  --handler index.handler `
-  --role arn:aws:iam::000000000000:role/lambda-role `
-  --zip-file fileb:///workspace/lambdas/create-annonce/create-annonce.zip `
-  --endpoint-url http://localstack:4566
-
-#### 4B.Si la fonction existe déjà → mettez-la à jour
-
-À utiliser quand vous avez un nouveau create-annonce.zip (nouveau build), sans recréer la fonction.
-
-docker run --rm --network infra_default `
-  -v "${PWD}:/workspace" `
-  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
-  amazon/aws-cli:2.15.40 lambda update-function-code `
-  --function-name create-annonce `
-  --zip-file fileb:///workspace/lambdas/create-annonce/create-annonce.zip `
-  --endpoint-url http://localstack:4566
-
-#### 5.Attendre que la Lambda soit active
-
-La commande est silencieuse en cas de succès (pas de sortie).
-
-Une fois la Lambda déployée et active, elle peut être appelée
-
-docker run --rm --network infra_default `
-  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
-  amazon/aws-cli:2.15.40 lambda wait function-active-v2 `
-  --function-name create-annonce `
-  --endpoint-url http://localstack:4566
-
-### Étape F - Lancer Frontend et Backend
+### Étape E - Lancer Frontend et Backend
 -Frontend: cd app/frontend || npm i || npm start
 
 -Backend: cd app/backend-node || npm i || npm run dev

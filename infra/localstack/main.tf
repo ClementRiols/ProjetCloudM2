@@ -66,3 +66,28 @@ resource "aws_dynamodb_table" "annonces" {
 resource "aws_sqs_queue" "annonce_events" {
   name = var.sqs_queue_name
 }
+
+resource "aws_iam_role" "lambda_role" {
+  name = "lambda-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = { Service = "lambda.amazonaws.com" },
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_lambda_function" "create_annonce" {
+  function_name = "create-annonce"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "index.handler"
+  runtime       = "nodejs18.x"
+
+  filename         = "../../lambdas/create-annonce/create-annonce.zip"
+  source_code_hash = filebase64sha256("../../lambdas/create-annonce/create-annonce.zip")
+
+  depends_on = [aws_iam_role.lambda_role]
+}
