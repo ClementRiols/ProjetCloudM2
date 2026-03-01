@@ -25,7 +25,7 @@ services:
       - localstack
     volumes:
       - "./localstack/init.sh:/init.sh:ro"
-    entrypoint: ["/bin/sh", "-lc", "/init.sh"]
+    entrypoint: ["/bin/sh", "-lc", "sh /init.sh"]
     environment:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
