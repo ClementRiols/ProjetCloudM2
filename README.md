@@ -2,7 +2,7 @@
 
 ## 1) Architecture & rôles des composants
 
-### Structure du projet (vue simplifiée)
+### Structure simplifiée du projet 
 - `infra/`
   - `docker-compose.yml` : démarre **LocalStack** (AWS local) sur le port `4566`
   - `localstack/`
