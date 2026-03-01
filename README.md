@@ -96,7 +96,7 @@ Objectif : déployer la fonction create-annonce pour activer l’interface de cr
 
 #### 1.Vérifier que le zip est bien présent en local (Windows / PowerShell):
 
-cd C:\Users\yajin\Downloads\ProjetCloudM2
+cd ProjetCloudM2
 dir .\lambdas\create-annonce\create-annonce.zip
 
 #### 2.Créer le rôle IAM lambda-role (si nécessaire):

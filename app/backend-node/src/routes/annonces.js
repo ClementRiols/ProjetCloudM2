@@ -56,16 +56,28 @@ router.get("/:id/image/upload-url", async (req, res) => {
  * CN: 创建公告（通过 Lambda 写入 DynamoDB + 发 SQS 事件）。
  */
 router.post("/", async (req, res) => {
-  const { annonceId, title, description, location, type, eventDate, imageKey } = req.body;
+  const { annonceId, title, description, location, type, eventDate, imageKey, mail, tel } = req.body;
 
   // FR: Validation minimale / CN: 最小校验
   if (!annonceId) return res.status(400).json({ error: "annonceId est requis." });
   if (!title) return res.status(400).json({ error: "Le titre est requis." });
   if (!type) return res.status(400).json({ error: "Le type est requis." });
+  if (!mail) return res.status(400).json({ error: "L'email est requis." });
+  if (!tel) return res.status(400).json({ error: "Le téléphone est requis." });
 
   try {
     // FR: Appel Lambda / CN: 调用 Lambda
-    const result = await createAnnonce({ annonceId, title, description, location, type, eventDate, imageKey });
+    const result = await createAnnonce({
+      annonceId,
+      title,
+      description,
+      location,
+      type,
+      eventDate,
+      imageKey,
+      mail,
+      tel,
+    });
 
     const status = result?.statusCode || 500;
     const body = result?.body ? JSON.parse(result.body) : { error: "Erreur Lambda." };
