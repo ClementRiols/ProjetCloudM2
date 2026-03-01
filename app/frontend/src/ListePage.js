@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 
 const API_BASE = "http://localhost:3000";
 const LOCALSTACK_BASE = "http://localhost:4566";
 const S3_BUCKET = "lostfound-images";
+const FALLBACK_IMG = "/default-cover.jpg"; 
 
 function ListePage() {
   const [annonces, setAnnonces] = useState([]);
@@ -57,10 +59,15 @@ function ListePage() {
   }, [annonces, filterTitle, filterLocation, filterDate, filterType]);
 
   return (
-    <div className="page-container">
+    <div className="page">
+      <div className="page-top">
+        <Link to="/" className="back-home">← Retour à l’accueil</Link>
+        <button className="btn btn-primary" onClick={fetchAnnonces}>Rafraîchir</button>
+      </div>
+
       <h2>Liste des annonces</h2>
 
-      <div className="filters" style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div className="filters">
         <input
           type="text"
           placeholder="Filtrer par titre"
@@ -73,67 +80,103 @@ function ListePage() {
           value={filterLocation}
           onChange={(e) => setFilterLocation(e.target.value)}
         />
-        <input type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} />
+        <input
+          type="date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+        />
         <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="">Tous types</option>
           <option value="PERDU">Perdu</option>
           <option value="TROUVE">Trouvé</option>
         </select>
-
-        <button onClick={fetchAnnonces}>Rafraîchir</button>
       </div>
 
-      <p>
-        Total: <strong>{filteredAnnonces.length}</strong>
+      <p className="meta">
+        Total : <strong>{filteredAnnonces.length}</strong>
       </p>
 
       {filteredAnnonces.length === 0 ? (
         <p>Aucune annonce correspondante.</p>
       ) : (
-        <ul className="annonce-list" style={{ padding: 0, listStyle: "none" }}>
+        <ul className="annonce-list">
           {filteredAnnonces.map((a) => {
-            const annonceId = (a.pk || "").split("#")[1] || "";
             const imageUrl = a.imageKey
               ? `${LOCALSTACK_BASE}/${S3_BUCKET}/${a.imageKey}`
               : null;
 
+            const status = (a.status || "OPEN").toString().toUpperCase();
+            const statusLabel = status === "OPEN" ? "OUVERTE" : "CLÔTURÉE";
+
             return (
-              <li
-                key={a.pk}
-                className="annonce-item"
-                style={{
-                  border: "1px solid #ccc",
-                  marginBottom: "10px",
-                  padding: "10px",
-                  borderRadius: "5px",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <strong>{a.title || "-"}</strong>
-                  <span>{a.status || "OPEN"}</span>
+              <li key={a.pk} className="annonce-item modern">
+                <div className="annonce-header">
+                  <div className="annonce-title">
+                    <strong className="title-text">{a.title || "-"}</strong>
+
+                    <div className="title-actions">
+                      <span className={`status-badge ${status === "OPEN" ? "open" : "closed"}`}>
+                        {statusLabel}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <p><strong>Type :</strong> {a.type || "-"}</p>
-                <p><strong>Description :</strong> {a.description || "-"}</p>
-                <p><strong>Lieu :</strong> {a.location || "-"}</p>
-                <p>
-                  <strong>Date :</strong>{" "}
-                  {a.eventDate ? new Date(a.eventDate).toLocaleDateString("fr-FR") : "-"}
-                </p>
+                <div className="annonce-content">
+                  <div className="annonce-image-wrapper">
+                    <img
+                      src={imageUrl || FALLBACK_IMG}
+                      alt="Image de l'annonce"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = FALLBACK_IMG;
+                      }}
+                    />
+                  </div>
 
-                {imageUrl && (
-                  <img
-                    src={imageUrl}
-                    alt="Image de l'annonce"
-                    style={{ maxWidth: "240px", marginTop: "10px", display: "block" }}
-                  />
-                )}
+                  <div className="annonce-info">
+                    <div className="info-row">
+                      <span className="info-label">Type</span>
+                      <span className={`type-badge ${a.type === "PERDU" ? "lost" : "found"}`}>
+                        {a.type || "-"}
+                      </span>
+                    </div>
 
-                {a.status === "OPEN" && (
-                  <button style={{ marginTop: "10px" }} onClick={() => resolveAnnonce(a.pk)}>
-                    Clôturer
-                  </button>
-                )}
+                    <div className="info-row">
+                      <span className="info-label">Lieu</span>
+                      <span>{a.location || "-"}</span>
+                    </div>
+
+                    <div className="info-row">
+                      <span className="info-label">Date</span>
+                      <span>
+                        {a.eventDate
+                          ? new Date(a.eventDate).toLocaleDateString("fr-FR")
+                          : "-"}
+                      </span>
+                    </div>
+
+                    <div className="info-description">
+                      <span className="info-label">Description</span>
+                      <p>{a.description || "-"}</p>
+                    </div>
+
+                    {status === "OPEN" && (
+                      <div className="action-buttons">
+                        <button
+                          className="btn btn-primary small compact"
+                          onClick={() => resolveAnnonce(a.pk)}
+                        >
+                          Clôturer
+                        </button>
+
+                        <button className="btn btn-ghost small compact">
+                          Contacter
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </li>
             );
           })}

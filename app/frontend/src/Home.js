@@ -5,19 +5,23 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="app-container">
-      <h2>Fonctionnalités</h2>
+    <div className="page home">
+      <h2>Bienvenue sur Retrouvéo</h2>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-        <button onClick={() => navigate("/create")}>
+      <p className="home-subtitle">
+        Publiez et consultez des annonces d’objets perdus ou trouvés en toute simplicité.
+      </p>
+
+      <div className="home-actions">
+        <button className="btn btn-primary" onClick={() => navigate("/create")}>
           Créer une annonce
         </button>
 
-        <button onClick={() => navigate("/annonces")}>
+        <button className="btn btn-ghost" onClick={() => navigate("/annonces")}>
           Voir les annonces
         </button>
 
-        <button onClick={() => navigate("/mes-annonces")}>
+        <button className="btn btn-ghost" onClick={() => navigate("/mes-annonces")}>
           Mes annonces
         </button>
       </div>

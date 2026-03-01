@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreateAnnonce from "./CreateAnnonce";
 
 function CreatePage() {
@@ -9,7 +9,11 @@ function CreatePage() {
   };
 
   return (
-    <div className="page-container"> 
+    <div className="page">
+      <div className="page-top">
+        <Link to="/" className="back-home">← Retour à l’accueil</Link>
+      </div>
+
       <CreateAnnonce onCreated={handleCreated} />
     </div>
   );
