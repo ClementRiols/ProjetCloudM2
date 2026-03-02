@@ -6,12 +6,14 @@ const LOCALSTACK_BASE = "http://localhost:4566";
 const S3_BUCKET = "lostfound-images";
 const FALLBACK_IMG = "/default-cover.jpg";
 
+
 function ListePage() {
   const [annonces, setAnnonces] = useState([]);
   const [filterTitle, setFilterTitle] = useState("");
   const [filterLocation, setFilterLocation] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [filterType, setFilterType] = useState("");
+  const myEmail = localStorage.getItem("userEmail") || "";
 
   const fetchAnnonces = useCallback(async () => {
     try {
@@ -43,12 +45,12 @@ function ListePage() {
     const l = filterLocation.toLowerCase();
     const ty = filterType.toLowerCase();
 
+
     return annonces.filter((a) => {
       const title = (a.title || "").toString().toLowerCase();
       const location = (a.location || "").toString().toLowerCase();
       const type = (a.type || "").toString().toLowerCase();
       const date = (a.eventDate || "").toString();
-
       const titleMatch = title.includes(t);
       const locationMatch = location.includes(l);
       const dateMatch = !filterDate || date.startsWith(filterDate);
@@ -107,7 +109,8 @@ function ListePage() {
 
             const status = (a.status || "OPEN").toString().toUpperCase();
             const statusLabel = status === "OPEN" ? "OUVERTE" : "CLÔTURÉE";
-
+            console.log("DEBUG ownerEmail:", a.ownerEmail, "myEmail:", myEmail);
+            const isOwner = (a.ownerEmail || "") === myEmail;
             return (
               <li key={a.pk} className="annonce-item modern">
                 <div className="annonce-header">
@@ -175,7 +178,7 @@ function ListePage() {
                       <p>{a.description || "-"}</p>
                     </div>
 
-                    {status === "OPEN" && (
+                    {status === "OPEN" && isOwner && (
                       <div className="action-buttons">
                         <button
                           className="btn btn-primary small compact"

@@ -76,6 +76,7 @@ export const handler = async (event) => {
           createdAt: { S: createdAt },
           mail: { S: body.mail || "" },
           tel: { S: body.tel || "" },
+          ownerEmail: { S: body.ownerEmail || "" },
         },
       })
     );

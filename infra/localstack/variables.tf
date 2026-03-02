@@ -33,3 +33,9 @@ variable "cors_allowed_origins" {
   type        = list(string)
   default     = ["http://localhost:3000", "http://localhost:3001"]
 }
+
+variable "users_table_name" {
+  description = "DynamoDB table name for users"
+  type        = string
+  default     = "Users"
+}

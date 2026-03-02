@@ -56,7 +56,7 @@ router.get("/:id/image/upload-url", async (req, res) => {
  * CN: 创建公告（通过 Lambda 写入 DynamoDB + 发 SQS 事件）。
  */
 router.post("/", async (req, res) => {
-  const { annonceId, title, description, location, type, eventDate, imageKey, mail, tel } = req.body;
+  const { annonceId, title, description, location, type, eventDate, imageKey, mail, tel, ownerEmail } = req.body;
 
   // FR: Validation minimale / CN: 最小校验
   if (!annonceId) return res.status(400).json({ error: "annonceId est requis." });
@@ -77,6 +77,7 @@ router.post("/", async (req, res) => {
       imageKey,
       mail,
       tel,
+      ownerEmail,
     });
 
     const status = result?.statusCode || 500;
