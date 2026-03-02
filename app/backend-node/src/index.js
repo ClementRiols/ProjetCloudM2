@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import annoncesRouter from "./routes/annonces.js";
+import authRouter from "./routes/auth.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(express.json({ limit: "10mb" }));
  * FR: Routes
  * CN: 路由入口
  */
+app.use("/auth", authRouter);
 app.use("/annonces", annoncesRouter);
 
 /**

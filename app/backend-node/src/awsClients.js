@@ -38,4 +38,5 @@ export const RESOURCE = {
   bucket: process.env.S3_BUCKET || "lostfound-images",
   table: process.env.DDB_TABLE || "Annonces",
   queueName: process.env.SQS_QUEUE_NAME || "annonce-events",
+  usersTable: process.env.USERS_TABLE || "Users",
 };

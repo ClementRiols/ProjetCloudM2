@@ -1,9 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Home";
 import CreatePage from "./CreatePage";
 import ListePage from "./ListePage";
 import MesAnnoncesPage from "./MesAnnoncesPage";
+
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
@@ -24,10 +28,46 @@ function App() {
       <main className="main">
         <div className="app-container">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create" element={<CreatePage />} />
-            <Route path="/annonces" element={<ListePage />} />
-            <Route path="/mes-annonces" element={<MesAnnoncesPage />} />
+            {/* Auth */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+
+            {/* Optionnel : rediriger toute route inconnue */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+
+            {/* Protected */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create"
+              element={
+                <ProtectedRoute>
+                  <CreatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/annonces"
+              element={
+                <ProtectedRoute>
+                  <ListePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mes-annonces"
+              element={
+                <ProtectedRoute>
+                  <MesAnnoncesPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
       </main>

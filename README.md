@@ -45,11 +45,9 @@ Dans `main.tf`, on crée précisément :
 **3) SQS**
 - File : `annonce-events`
 
-**4) Lambda**
-Une fois les ressources créées :
-- la fonction Lambda s’appelle :
-  - `create-annonce`
-- elle sert à **implémenter l’interface.**
+**4)IAM + Lambda**
+- Role : `lambda-role`
+- Lambda : `create-annonce` (Node.js 18)
 
 ---
 
@@ -91,3 +89,27 @@ SQS : file annonce-events
 -Frontend: cd app/frontend || npm i || npm start
 
 -Backend: cd app/backend-node || npm i || npm run dev
+
+## 3) Remarques
+
+### S'il y a des modifications du lambda, on aura besoin de le rezipper et l'actualiser (zip et update)
+- Command pour zipper le package lambda:
+cd ProjetCloudM2
+
+docker run --rm `
+  -v "${PWD}:/workspace" `
+  -w /workspace/lambdas/create-annonce `
+  node:20-alpine sh -lc `
+  "apk add --no-cache zip >/dev/null && npm install && npm run build:zip && ls -la && test -f create-annonce.zip"
+
+- Command pour actualiser le déployement du lambda:
+cd ProjetCloudM2
+
+docker run --rm --network infra_default `
+  -v "${PWD}:/workspace" `
+  -e AWS_ACCESS_KEY_ID=test -e AWS_SECRET_ACCESS_KEY=test -e AWS_DEFAULT_REGION=us-east-1 `
+  amazon/aws-cli:2.15.40 lambda update-function-code `
+  --function-name create-annonce `
+  --zip-file fileb:///workspace/lambdas/create-annonce/create-annonce.zip `
+  --endpoint-url http://localstack:4566
+
