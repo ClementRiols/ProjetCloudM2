@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 function App() {
   return (
     <Router>
+       {/* En-tête commun affiché sur l’ensemble de l’application */}
       <header className="header">
         <div className="header-left">
           <div className="brand-mark" aria-hidden="true">
@@ -28,14 +29,14 @@ function App() {
       <main className="main">
         <div className="app-container">
           <Routes>
-            {/* Auth */}
+            {/* Routes publiques : accessibles sans authentification */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
-            {/* Optionnel : rediriger toute route inconnue */}
+            {/* Redirection des routes inconnues vers la page d’accueil */}
             <Route path="*" element={<Navigate to="/" replace />} />
 
-            {/* Protected */}
+            {/* Routes protégées : accès autorisé seulement si un token est présent */}
             <Route
               path="/"
               element={
@@ -60,14 +61,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/mes-annonces"
               element={
                 <ProtectedRoute>
                   <MesAnnoncesPage />
                 </ProtectedRoute>
               }
-            />
+            /> */}
           </Routes>
         </div>
       </main>

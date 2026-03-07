@@ -10,12 +10,11 @@ const router = express.Router();
 
 /**
  * FR: GET /annonces -> liste toutes les annonces (scan DynamoDB)
- * CN: 获取公告列表（DynamoDB scan）
  */
 router.get("/", async (_req, res) => {
   try {
     const data = await ddb.send(new ScanCommand({ TableName: RESOURCE.table }));
-    // FR: On retourne un tableau JSON simple. / CN: 返回普通数组，前端无需解析 {S:...}
+    // FR: On retourne un tableau JSON simple. 
     res.json(data.Items || []);
   } catch (err) {
     console.error("ERREUR GET /annonces:", err);
@@ -26,7 +25,6 @@ router.get("/", async (_req, res) => {
 /**
  * FR: GET /annonces/:id/image/upload-url
  *     -> génère une URL pré-signée pour uploader une image dans S3.
- * CN: 生成 presigned URL，用于前端直接 PUT 图片到 S3。
  */
 router.get("/:id/image/upload-url", async (req, res) => {
   const annonceId = req.params.id;
@@ -37,13 +35,12 @@ router.get("/:id/image/upload-url", async (req, res) => {
     const command = new PutObjectCommand({
       Bucket: RESOURCE.bucket,
       Key: key,
-      ContentType: "image/jpeg", // FR: simple / CN: 简化处理（也可从前端传）
+      ContentType: "image/jpeg", // FR: simple 
     });
 
     const uploadUrl = await getSignedUrl(s3, command, { expiresIn: 300 });
 
     // FR: On renvoie aussi la clé S3 pour l'enregistrer dans DynamoDB.
-    // CN: 同时返回 key，方便写入 DynamoDB。
     res.json({ uploadUrl, key });
   } catch (err) {
     console.error("ERREUR GET upload-url:", err);
@@ -53,12 +50,11 @@ router.get("/:id/image/upload-url", async (req, res) => {
 
 /**
  * FR: POST /annonces -> crée une annonce via Lambda.
- * CN: 创建公告（通过 Lambda 写入 DynamoDB + 发 SQS 事件）。
  */
 router.post("/", async (req, res) => {
   const { annonceId, title, description, location, type, eventDate, imageKey, mail, tel, ownerEmail } = req.body;
 
-  // FR: Validation minimale / CN: 最小校验
+  // FR: Validation minimale 
   if (!annonceId) return res.status(400).json({ error: "annonceId est requis." });
   if (!title) return res.status(400).json({ error: "Le titre est requis." });
   if (!type) return res.status(400).json({ error: "Le type est requis." });
@@ -66,7 +62,7 @@ router.post("/", async (req, res) => {
   if (!tel) return res.status(400).json({ error: "Le téléphone est requis." });
 
   try {
-    // FR: Appel Lambda / CN: 调用 Lambda
+    // FR: Appel Lambda
     const result = await createAnnonce({
       annonceId,
       title,
@@ -92,7 +88,6 @@ router.post("/", async (req, res) => {
 
 /**
  * FR: PATCH /annonces/:id/resolve -> clôture une annonce (status=RESOLVED)
- * CN: 关闭公告（status=RESOLVED）
  */
 router.patch("/:id/resolve", async (req, res) => {
   const annonceId = req.params.id;

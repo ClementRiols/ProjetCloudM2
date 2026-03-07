@@ -22,7 +22,6 @@ function CreateAnnonce({ onCreated }) {
     /**
      * FR: ID unique généré côté frontend pour:
      *     - lier l'image S3 et l'annonce DynamoDB
-     * CN: 前端生成唯一ID，确保图片和DynamoDB公告同一个ID
      */
     const annonceId = crypto.randomUUID();
 
