@@ -78,7 +78,7 @@ Le fonctionnement global peut se résumer ainsi :
   - soit il **accède directement à LocalStack** via l’**AWS SDK** (ex. lecture des données, authentification/connexion),
   - soit il **invoke une Lambda** (ex. création d’une annonce).
 - **Lambda** (si utilisée) → exécute la logique métier puis **écrit dans DynamoDB** et/ou **publie un événement dans SQS**.
---
+---
 
 ## 3) Première exécution (setup complet depuis un clone)
 
@@ -118,8 +118,9 @@ SQS : file annonce-events
 -Frontend: cd app/frontend || npm i || npm start
 
 -Backend: cd app/backend-node || npm i || npm run dev
+---
 
-## 3) Remarques
+## 4) Remarques
 
 ### S'il y a des modifications du lambda, on aura besoin de le rezipper et l'actualiser (zip et update)
 - Command pour zipper le package lambda:
