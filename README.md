@@ -1,5 +1,11 @@
 # Retrouvéo - site des objets perdus/trouvés
 
+## À propos du site
+
+**Retrouvéo** est un site de **signalement d’objets perdus et trouvés**.  
+Les utilisateurs peuvent **créer une annonce** (perdu/trouvé) avec un titre, une description, un lieu, une date et, si besoin, une **image**, puis **consulter la liste des annonces** pour faciliter la restitution des objets.  
+Un système de **connexion/inscription** permet d’accéder aux fonctionnalités principales du site.
+
 ## 1) Architecture & Configuration
 
 ### Structure simplifiée du projet 
