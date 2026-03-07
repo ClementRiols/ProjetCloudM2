@@ -10,7 +10,6 @@ const app = express();
 
 /**
  * FR: CORS pour le frontend (Vite/React).
- * CN: 允许前端跨域访问后端。
  */
 app.use(
   cors({
@@ -24,14 +23,12 @@ app.use(express.json({ limit: "10mb" }));
 
 /**
  * FR: Routes
- * CN: 路由入口
  */
 app.use("/auth", authRouter);
 app.use("/annonces", annoncesRouter);
 
 /**
  * FR: Health check
- * CN: 健康检查
  */
 app.get("/health", (_req, res) => {
   res.json({ message: "Serveur OK." });

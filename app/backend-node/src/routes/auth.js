@@ -5,7 +5,7 @@ import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb, RESOURCE } from "../awsClients.js";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret"; // 本地测试用
+const JWT_SECRET = process.env.JWT_SECRET || "dev-secret"; 
 
 function userPk(email) {
   return `USER#${String(email).trim().toLowerCase()}`;

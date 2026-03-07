@@ -4,7 +4,6 @@ import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 /**
  * FR: Dans LocalStack, la Lambda tourne dans un conteneur.
  *     "host.docker.internal" permet d'accéder à LocalStack sur la machine hôte.
- * CN: LocalStack 的 Lambda 在容器里跑，用 host.docker.internal 访问宿主机的 4566。
  */
 const LOCALSTACK_ENDPOINT = process.env.LOCALSTACK_ENDPOINT || "http://host.docker.internal:4566";
 
@@ -33,7 +32,6 @@ export const handler = async (event) => {
 
   /**
    * FR: On exige annonceId venant du frontend pour garder la cohérence (imageKey / pk).
-   * CN: 强制使用前端传来的 annonceId，确保图片 key 和 pk 对齐。
    */
   const annonceId = body.annonceId;
   if (!annonceId) {

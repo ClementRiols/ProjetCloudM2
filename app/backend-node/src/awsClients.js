@@ -8,7 +8,6 @@ dotenv.config();
 
 /**
  * FR: Configuration commune pour LocalStack.
- * CN: LocalStack 通用配置（统一 region/endpoint/凭证，避免写读分裂）。
  */
 const region = process.env.AWS_REGION || "us-east-1";
 const endpoint = process.env.LOCALSTACK_ENDPOINT || "http://localhost:4566";
@@ -24,7 +23,7 @@ const config = {
 
 export const s3 = new S3Client({
   ...config,
-  forcePathStyle: true, // FR: nécessaire pour LocalStack / CN: LocalStack 必须
+  forcePathStyle: true, // FR: nécessaire pour LocalStack 
 });
 
 const ddbClient = new DynamoDBClient(config);

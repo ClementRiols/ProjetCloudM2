@@ -6,7 +6,7 @@ function Home() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login", { replace: true }); // 比 window.location.href 更干净
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -18,19 +18,22 @@ function Home() {
       </p>
 
       <div className="home-actions">
+        {/* Accès à la page de création d’annonce */}
         <button className="btn btn-primary" onClick={() => navigate("/create")}>
           Créer une annonce
         </button>
 
+        {/* Accès à la liste des annonces */}
         <button className="btn btn-ghost" onClick={() => navigate("/annonces")}>
           Voir les annonces
         </button>
 
-        <button className="btn btn-ghost" onClick={() => navigate("/mes-annonces")}>
+        {/* Fonctionnalité optionnelle actuellement désactivée */}
+        {/* <button className="btn btn-ghost" onClick={() => navigate("/mes-annonces")}>
           Mes annonces
-        </button>
+        </button> */}
 
-        {/* Déconnexion */}
+        {/* Déconnexion de l’utilisateur */}
         <button className="btn btn-ghost" onClick={handleLogout}>
           Déconnexion
         </button>

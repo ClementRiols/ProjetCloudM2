@@ -1,6 +1,6 @@
 # Retrouvéo - site des objets perdus/trouvés
 
-## 1) Architecture & rôles des composants
+## 1) Architecture & Configuration
 
 ### Structure simplifiée du projet 
 - `infra/`
@@ -37,21 +37,44 @@ Dans `main.tf`, on crée précisément :
   - `MaxAgeSeconds = 3000`
 
 **2) DynamoDB**
+- Table : `Users`
 - Table : `Annonces`
-- Clé de partition (HASH) : `pk` (String)
-- Clé de tri (RANGE) : `sk` (String)
-- Mode : `PAY_PER_REQUEST`
+
 
 **3) SQS**
 - File : `annonce-events`
 
 **4)IAM + Lambda**
 - Role : `lambda-role`
-- Lambda : `create-annonce` (Node.js 18)
+- Lambda : `create-annonce`
 
+### Backend(Nodejs)
+
+### Frontend(React)
 ---
 
-## 2) Première exécution (setup complet depuis un clone)
+## 2) Déroulement du projet
+
+### Fonctionalités réaliées
+
+- Inscription
+- Connexion (JWT)
+- Création d'une annonce
+- Affichage de la liste des annonces
+- Clôturer une annonce en modifiant l'état de l'annonce
+
+### Chaîne d’exécution (Front → Back → LocalStack / Lambda)
+
+Le fonctionnement global peut se résumer ainsi :
+
+- **Front-end** → appelle une **API du back-end** (via `fetch`).
+- **Back-end** → selon la fonctionnalité :
+  - soit il **accède directement à LocalStack** via l’**AWS SDK** (ex. lecture des données, authentification/connexion),
+  - soit il **invoke une Lambda** (ex. création d’une annonce).
+- **Lambda** (si utilisée) → exécute la logique métier puis **écrit dans DynamoDB** et/ou **publie un événement dans SQS**.
+--
+
+## 3) Première exécution (setup complet depuis un clone)
 
 ### Étape A — Récupérer le projet
 git clone <URL_DU_DEPOT>
