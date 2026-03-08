@@ -13,7 +13,7 @@ function ListePage() {
   const [filterLocation, setFilterLocation] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [filterType, setFilterType] = useState("");
-  const myEmail = localStorage.getItem("userEmail") || "";
+  const myEmail = sessionStorage.getItem("userEmail") || "";
 
   const fetchAnnonces = useCallback(async () => {
     try {
