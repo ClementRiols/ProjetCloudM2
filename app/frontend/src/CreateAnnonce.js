@@ -41,7 +41,7 @@ function CreateAnnonce({ onCreated }) {
 
         imageKey = key;
       }
-      const ownerEmail = localStorage.getItem("userEmail") || "";
+      const ownerEmail = sessionStorage.getItem("userEmail") || "";
       // 2) Create annonce via backend -> lambda -> dynamodb
       const res = await fetch(`${API_BASE}/annonces`, {
         method: "POST",

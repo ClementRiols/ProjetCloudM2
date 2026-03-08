@@ -23,4 +23,4 @@ console.log("Building zip:", zipPath);
 // We add files WITHOUT the folder prefix.
 execSync(`zip -r ${zipName} index.js package.json node_modules`, { stdio: "inherit" });
 
-console.log(`OK: ${zipName} généré ✅`);
+console.log(`OK: ${zipName} généré avec succès.`);

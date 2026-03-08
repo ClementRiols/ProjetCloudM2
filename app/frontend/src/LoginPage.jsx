@@ -22,8 +22,8 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) return alert(data?.error || "Erreur de connexion.");
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userEmail", email); 
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("userEmail", data.user.email);
       nav("/", { replace: true });
     } catch (e) {
       console.error(e);
